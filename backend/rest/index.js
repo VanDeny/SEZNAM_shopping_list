@@ -1,6 +1,10 @@
-const express = require('express')
+import { connectDB } from '../db/index.js'
+import express from 'express';
+
 const app = express()
 const port = 3000
+
+connectDB().then(rp => {});
 
 app.get('/shopping-list', (req, res) => {
     res.send('Hello World!')
