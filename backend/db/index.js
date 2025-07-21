@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import ShoppingListModel from "./model/shopping-list.model.js";
 
 export const connectDB = async () => {
     try {
@@ -9,6 +10,14 @@ export const connectDB = async () => {
     }
 };
 
-async function initializeDefaultDB() {
-    if (await )
+export async function initializeDefaultDB() {
+    if (await ShoppingListModel.countDocuments() === 0) {
+        await ShoppingListModel.create({
+            name: 'Default shopping list',
+            items: []
+        });
+        console.log('Created default shopping list');
+    } else {
+        console.log('Shopping list detected, skipped creating Default shopping list');
+    }
 }
