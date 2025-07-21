@@ -7,11 +7,12 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js",
-    "run": "node index.js"
+    "backend.test": "echo \"Error: no test specified\" && exit 1",
+    "backend.dev": "nodemon index.js",
+    "backend.run": "node index.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "mongoose": "^8.16.4"
   },

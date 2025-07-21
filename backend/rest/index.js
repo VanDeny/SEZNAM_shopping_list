@@ -3,11 +3,13 @@ import express from 'express';
 import shoppingListModel from "../db/model/shopping-list.model.js";
 import mongoose from 'mongoose'
 import isIdValid from "./routine/idValidation.routine.js";
+import cors from 'cors';
 
 const app = express()
-const port = 3000
+const port = 8080
 
 app.use(express.json());
+app.use(cors());
 
 connectDB().then(async () => {
     await initializeDefaultDB()
