@@ -49,6 +49,14 @@ export async function deleteItemFromShoppingList(_id: string, _item_id: string):
     });
 }
 
+export async function editItemInShoppingList(listId: string, itemId: string, newName: string): Promise<void> {
+    await safeFetch(BASE_URL + listId + '/items/' + itemId, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newName }),
+    });
+}
+
 export async function safeFetch<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
     const response = await fetch(input, init);
 

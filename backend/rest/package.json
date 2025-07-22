@@ -7,9 +7,9 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "backend.test": "echo \"Error: no test specified\" && exit 1",
-    "backend.dev": "nodemon index.js",
-    "backend.run": "node index.js"
+    "backend:test": "echo \"Error: no test specified\" && exit 1",
+    "backend:dev": "nodemon index.js",
+    "backend:run": "node index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

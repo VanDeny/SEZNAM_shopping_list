@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {IShoppingList} from "../../models/shoppingList.model";
 import {
     addNewItemToShoppingList,
-    deleteItemFromShoppingList,
+    deleteItemFromShoppingList, editItemInShoppingList,
     getShoppingListByID
 } from "../../services/api/api.service";
 import {useNavigate, useParams} from "react-router-dom";
@@ -16,6 +16,8 @@ export default function ShoppingListDetail() {
     const [shoppingList, setShoppingList] = useState<IShoppingList | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [shoppingListItem, setShoppingListItem] = useState<string>('');
+    const [editingItemId, setEditingItemId] = useState<string | null>(null);
+    const [editedItemName, setEditedItemName] = useState<string>('');
 
     const navigate = useNavigate();
 
@@ -54,9 +56,31 @@ export default function ShoppingListDetail() {
         }
     }
 
-    const editItem = async (itemToUpdate: string) => {
+    const startEditingItem = (item: IShoppingItem) => {
+        setEditingItemId(item._id);
+        setEditedItemName(item.name);
+    };
 
-    }
+        const updateItem = async () => {
+        if (!shoppingList || !editingItemId || !editedItemName) return;
+
+        setIsLoading(true);
+        setErrorMessage(null);
+        try {
+            await editItemInShoppingList(shoppingList._id, editingItemId, editedItemName);
+            setEditingItemId(null);
+            setEditedItemName('');
+            await refresh();
+        } catch (e) {
+            if (e instanceof Error) {
+                setErrorMessage(e.message);
+            } else {
+                setErrorMessage('Unexpected error occurred');
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const deleteItem = async (itemToDelete: string) => {
         if (!itemToDelete || !shoppingList) return;
@@ -67,7 +91,7 @@ export default function ShoppingListDetail() {
                 setIsLoading(false);
                 setShoppingListItem('');
                 refresh();
-            }, 500);
+            }, 3000);
         } catch (e) {
             console.log(e);
             setIsLoading(false);
@@ -79,21 +103,38 @@ export default function ShoppingListDetail() {
         setShoppingListItem(e.target.value);
     }
 
+    const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEditedItemName(e.target.value)
+    }
+
     if (!shoppingList) return <p>Loading...</p>;
 
     const shoppingListItems = shoppingList.items.length === 0 ?
         <div>Shopping list is empty</div> :
         <ul>
             {shoppingList.items.map((item: IShoppingItem, i) => (
-                <li key={i}>{item.name}
-                    <div className={'shopping-list-buttons'}>
-                        <button className={'edit-button'} onClick={() => editItem(item._id)}>
-                            Edit item
-                        </button>
-                        <button className={'delete-button'} onClick={() => deleteItem(item._id)}>
-                            Delete item
-                        </button>
-                    </div>
+                <li key={i}>
+                    {editingItemId === item._id ? (
+                        <div>
+                            <input
+                                value={editedItemName}
+                                onChange={(e) => handleEditChange(e)}
+                            />
+                            <button className={'add-button'} onClick={updateItem}>Update</button>
+                            <button className={'delete-button'} onClick={() => {
+                                setEditingItemId(null);
+                                setEditedItemName('');
+                            }}>Cancel</button>
+                        </div>
+                    ) : (
+                        <div>
+                            {item.name}
+                            <div className={'shopping-list-buttons'}>
+                                <button className={'edit-button'} onClick={() => startEditingItem(item)}>Edit item</button>
+                                <button className={'delete-button'} onClick={() => deleteItem(item._id)}>Delete item</button>
+                            </div>
+                        </div>
+                    )}
                 </li>
             ))}
         </ul>

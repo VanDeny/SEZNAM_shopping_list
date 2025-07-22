@@ -124,3 +124,27 @@ li {
   top: 2%;
   left: 2%;
 }
+
+input[type="text"],
+input {
+  padding: 8px 12px;
+  background-color: #3a3f4b;
+  border: 1px solid #555;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+input:focus {
+  border-color: #61dafb;
+  box-shadow: 0 0 0 2px rgba(97, 218, 251, 0.3);
+}
+
+input::placeholder {
+  color: #aaa;
+}

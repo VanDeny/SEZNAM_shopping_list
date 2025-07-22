@@ -147,27 +147,41 @@ app.delete('/shopping-list/:id/items/:item_id', async (req, res) => {
         }
     });
 });
-/*
+
 app.patch('/shopping-list/:id/items/:item_id', async (req, res) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id) || !mongoose.Types.ObjectId.isValid(req.params.item_id) ) {
-        res.status(400).json({error: 'Invalid ID format'});
-        return;
+    const { id, item_id } = req.params;
+    const { name } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(item_id)) {
+        return res.status(400).json({ error: 'Invalid ID format' });
     }
-    if (!req.body) {
-        res.status(400).json({error: 'Invalid body'});
+
+    if (!name || typeof name !== 'string') {
+        return res.status(400).json({ error: 'Invalid item name' });
     }
 
-    const list = await shoppingListModel.findById(req.params.id);
+    const duplicate = await shoppingListModel.findOne({
+        _id: id,
+        'items.name': name,
+        'items._id': { $ne: item_id },
+    });
 
+    if (duplicate) {
+        return res.status(400).json({ error: 'Item with this name already exists' });
+    }
 
-    const updated = await list.items.updateOne({_id: req.params.id}, {$set: {name: req.body.name}});
-    if (list) {
-        res.status(204).send('Shopping list updated');
+    const result = await shoppingListModel.updateOne(
+        { _id: id, 'items._id': item_id },
+        { $set: { 'items.$.name': name } }
+    );
+
+    if (result.modifiedCount > 0) {
+        return res.status(204).send();
     } else {
-        res.status(404).json({error: 'Shopping list not found'});
+        return res.status(404).json({ error: 'Item not found or not modified' });
     }
 });
-*/
+
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
