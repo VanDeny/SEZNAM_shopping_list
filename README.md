@@ -10,6 +10,7 @@ Shopping list, part of technical task for Seznam interview
 
 ### Built With
 
+* Typescript
 * React
 * Node.js
 * Express.js
