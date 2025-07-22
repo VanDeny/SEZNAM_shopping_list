@@ -52,6 +52,9 @@ Installed Docker and Node.js
    ../frontend $ npm install
    ```
    ```sh
+   ../backend/db $ npm install
+   ```
+   ```sh
    ../backend/rest $ npm install
    ```
 3. Run backend
