@@ -22,8 +22,6 @@ Shopping list, part of technical task for Seznam interview
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Copy this project is probably the best start
-
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
