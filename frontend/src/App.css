@@ -117,3 +117,10 @@ li {
 .shopping-list-buttons button.add-button:hover {
   background-color: #27b827;
 }
+
+.shopping-list-buttons button.back-button {
+  background-color: #ff6b6b;
+  position: absolute;
+  top: 2%;
+  left: 2%;
+}

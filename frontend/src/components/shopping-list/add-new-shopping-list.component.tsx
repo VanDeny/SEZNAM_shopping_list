@@ -16,6 +16,7 @@ export function AddNewShoppingList() {
     }
 
     const createNewShoppingList = async () => {
+        if(!newShoppingListName || /[\s\t]/.test(newShoppingListName)) return;
         setErrorMessage(null);
         setIsLoading(true);
         try {
@@ -34,7 +35,8 @@ export function AddNewShoppingList() {
         }
     }
 
-    return (<div className={'shopping-list-body'}>
+    return (<div className={'shopping-list-body shopping-list-buttons'}>
+        <button className={'back-button'} onClick={() => navigate('/')}>Back</button>
         <h2>Create new shopping list</h2>
         <input value={newShoppingListName} onChange={(e) => handleInputChange(e)}/>
         <div className={'shopping-list-buttons'}>

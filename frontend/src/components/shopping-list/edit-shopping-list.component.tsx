@@ -13,10 +13,14 @@ export default function EditShoppingList () {
     const navigate = useNavigate();
 
     useEffect(() => {
-        refresh()
+        const load = async () => {
+            await refresh();
+        };
+
+        load();
     }, [id]);
 
-    const refresh = () => {
+    const refresh = async () => {
         if (id) {
             getShoppingListByID(id)
                 .then((data: IShoppingList) => {
@@ -30,23 +34,23 @@ export default function EditShoppingList () {
     }
 
     const editShoppingList = async () => {
+        if(!newShoppingListName || /[\s\t]/.test(newShoppingListName)) return;
         setIsLoading(true);
         try {
-            editShoppingListName({_id: id, name: newShoppingListName} as Partial<IShoppingList>)
-                .then(() => {
-                        setTimeout(() => {
-                            setIsLoading(false);
-                            navigate('/');
-                        }, 1000);
-                    }
-                );
+            await editShoppingListName({_id: id, name: newShoppingListName} as Partial<IShoppingList>);
+            setTimeout(() => {
+                setIsLoading(false);
+                navigate('/');
+            }, 1000);
         } catch (e) {
             setIsLoading(false);
             console.error(e);
         }
     }
 
-    return (<div className={'shopping-list-body'}>
+    return (
+        <div className={'shopping-list-body shopping-list-buttons'}>
+        <button className={'back-button'} onClick={() => navigate('/')}>Back</button>
         Edit name:
         <input value={newShoppingListName} onChange={(e) => handleInputChange(e)}/>
         <button onClick={() => editShoppingList()}>

@@ -5,24 +5,29 @@ import {
     deleteItemFromShoppingList,
     getShoppingListByID
 } from "../../services/api/api.service";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {IShoppingItem} from "../../models/shoppingItem.model";
 import {SpinnerOverlay} from "../overlay/spinner-overlay.component";
 
 export default function ShoppingListDetail() {
     const {id} = useParams<{ id: string }>();
+
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [shoppingList, setShoppingList] = useState<IShoppingList | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-
     const [shoppingListItem, setShoppingListItem] = useState<string>('');
 
+    const navigate = useNavigate();
+
     useEffect(() => {
-        refresh()
+        const load = async () => {
+            await refresh();
+        };
+
+        load();
     }, [id]);
 
-    const refresh = () => {
+    const refresh = async () => {
         if (id) {
             getShoppingListByID(id)
                 .then(setShoppingList);
@@ -37,7 +42,7 @@ export default function ShoppingListDetail() {
             await addNewItemToShoppingList(shoppingList._id, shoppingListItem);
 
             setShoppingListItem('');
-            refresh();
+            await refresh();
         } catch (e) {
             if (e instanceof Error) {
                 setErrorMessage(e.message);
@@ -94,17 +99,18 @@ export default function ShoppingListDetail() {
         </ul>
 
     return (
-        <div className={'shopping-list-body'}>
+        <div className={'shopping-list-body shopping-list-buttons'}>
+            <button className={'back-button'} onClick={() => navigate('/')}>Back</button>
             <h2>{shoppingList.name}</h2>
             Add New Item
             <input value={shoppingListItem} onChange={(e) => handleInputChange(e)}/>
-            <div className={'shopping-list-buttons'}>
+            <div className={''}>
                 <button className={'add-button'} onClick={() => addNewItem()}>
                     Add new item
                 </button>
             </div>
             {shoppingListItems}
-            {isLoading && <SpinnerOverlay />}
+            {isLoading && <SpinnerOverlay/>}
             {errorMessage && (
                 <div className="error-message">
                     {errorMessage}

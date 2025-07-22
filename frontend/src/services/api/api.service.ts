@@ -6,30 +6,27 @@ export async function pullShoppingLists(): Promise<IShoppingList[]> {
     return safeFetch(BASE_URL);
 }
 
-export async function createShoppingList(data: Partial<IShoppingList>): Promise<boolean> {
+export async function createShoppingList(data: Partial<IShoppingList>): Promise<void> {
     await safeFetch(BASE_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
     });
-    return true;
 }
 
-export async function deleteShoppingList(_id: string): Promise<boolean> {
+export async function deleteShoppingList(_id: string): Promise<void> {
     await safeFetch(BASE_URL + _id, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
     });
-    return true;
 }
 
-export async function editShoppingListName(newShoppingList: Partial<IShoppingList>): Promise<boolean> {
+export async function editShoppingListName(newShoppingList: Partial<IShoppingList>): Promise<void> {
     await safeFetch(BASE_URL + newShoppingList._id, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({name: newShoppingList.name}),
     });
-    return true
 }
 
 export async function getShoppingListByID(_id: string): Promise<IShoppingList> {
@@ -37,45 +34,36 @@ export async function getShoppingListByID(_id: string): Promise<IShoppingList> {
 }
 
 //Items
-export async function addNewItemToShoppingList(_id: string, newShoppingItem: string): Promise<boolean> {
+export async function addNewItemToShoppingList(_id: string, newShoppingItem: string): Promise<void> {
     await safeFetch(BASE_URL + _id + '/items', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ item: { name: newShoppingItem } })
     });
-    return true;
 }
 
-export async function deleteItemFromShoppingList(_id: string, _item_id: string): Promise<boolean> {
+export async function deleteItemFromShoppingList(_id: string, _item_id: string): Promise<void> {
     await safeFetch(BASE_URL + _id + '/items/' + _item_id, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
     });
-    return true;
 }
 
 export async function safeFetch<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
     const response = await fetch(input, init);
 
+    const isJSON = response.headers.get('content-type')?.includes('application/json');
     if (!response.ok) {
-        let errorMessage = 'Unexpected error';
-
-        try {
-            const body = await response.json();
-            errorMessage = body?.error || body?.message || errorMessage;
-        } catch {
+        let message = 'Unexpected error';
+        if (isJSON) {
+            try {
+                const body = await response.json();
+                message = body?.error || body?.message || message;
+            } catch {}
         }
-
-        throw new Error(errorMessage);
+        throw new Error(message);
     }
 
-    const contentLength = response.headers.get('content-length');
-    const contentType = response.headers.get('content-type') || '';
-
-    if (contentLength === '0' || !contentType.includes('application/json')) {
-        return undefined as T;
-    }
-
+    if (!isJSON) return undefined as T;
     return response.json();
 }
-

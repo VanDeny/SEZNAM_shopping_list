@@ -11,5 +11,5 @@ const ShoppingListSchema = new mongoose.Schema({
     items: [ItemSchema],
 })
 
-const ShoppingList = mongoose.model('ShopppingList', ShoppingListSchema);
+const ShoppingList = mongoose.model('ShoppingList', ShoppingListSchema);
 export default ShoppingList;
