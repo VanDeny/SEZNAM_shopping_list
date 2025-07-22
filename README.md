@@ -25,11 +25,17 @@ Shopping list, part of technical task for Seznam interview
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+Installed Docker and Node.js
+
 * npm
   ```sh
   npm install npm@latest -g
   ```
+* pull MongoDB docker
+  ```sh
+  docker pull mongo:latest
+  ```
+  
 * docker + MongoDB
   ```sh
   docker run -d --name mongodb -p 27017:27017 -v mongodata:/data/db mongo:latest
