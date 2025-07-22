@@ -37,6 +37,9 @@ app.get('/shopping-list/:id', async (req, res) => {
 });
 
 app.post('/shopping-list', async (req, res) => {
+    const exists = await shoppingListModel.findOne({ name: req.body.name });
+    if (exists) return res.status(400).json({ error: 'Name already exists' });
+
     const list = await shoppingListModel.create({
         name: req.body.name,
         items: []
@@ -96,8 +99,16 @@ app.get('/shopping-list/:id/items', async (req, res) => {
 
 app.post('/shopping-list/:id/items', async (req, res) => {
     if (!isIdValid(req.params.id, res)) {
+        res.status(404).json({error: 'Wrong ID'});
         return;
     }
+
+    const duplicate = await ShoppingList.findOne({
+        _id: req.params.id,
+        'items.name': req.body.name,
+    });
+    if (duplicate) return res.status(400).json({ error: 'Item already exists' });
+
 
     shoppingListModel.updateOne({_id: req.params.id}, {$addToSet: {items: req.body.item}}).then(result => {
         console.log(result);
