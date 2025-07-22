@@ -35,15 +35,85 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.shopping-list-body {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
+li {
+  list-style-type: none;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.list-name {
+  cursor: pointer;
+}
+
+.list-name:hover {
+  color: rgb(43 113 188);
+}
+
+@keyframes spin {
   to {
     transform: rotate(360deg);
   }
+}
+
+.error-message {
+  color: #ff6b6b;
+  background-color: #2e2e2e;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+.shopping-list-buttons button {
+  padding: 6px 12px;
+  margin: 0 4px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+.shopping-list-buttons button.edit-button {
+  background-color: #3a3f4b;
+}
+
+.shopping-list-buttons button.edit-button:hover {
+  background-color: #505764;
+}
+
+.shopping-list-buttons button.delete-button {
+  background-color: #552e2e;
+}
+
+.shopping-list-buttons button.delete-button:hover {
+  background-color: #7a3e3e;
+}
+
+.shopping-list-buttons button.add-button {
+  background-color: #2f962f;
+}
+
+.shopping-list-buttons button.add-button:hover {
+  background-color: #27b827;
 }

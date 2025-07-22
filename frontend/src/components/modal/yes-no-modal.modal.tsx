@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import ReactDOM from "react-dom/client";
+import './yes-no-modal.component.css';
 
 export function confirm(message: string, title?: string): Promise<boolean> {
     const container = document.createElement('div');

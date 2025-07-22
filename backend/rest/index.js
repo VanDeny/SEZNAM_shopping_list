@@ -99,28 +99,36 @@ app.get('/shopping-list/:id/items', async (req, res) => {
 
 app.post('/shopping-list/:id/items', async (req, res) => {
     if (!isIdValid(req.params.id, res)) {
-        res.status(404).json({error: 'Wrong ID'});
-        return;
+        return res.status(404).json({ error: 'Wrong ID' });
     }
 
-    const duplicate = await ShoppingList.findOne({
+    const item = req.body.item;
+
+    if (!item || typeof item.name !== 'string') {
+        return res.status(400).json({ error: 'Invalid item format' });
+    }
+
+    const duplicate = await shoppingListModel.findOne({
         _id: req.params.id,
-        'items.name': req.body.name,
+        'items.name': item.name,
     });
-    if (duplicate) return res.status(400).json({ error: 'Item already exists' });
 
+    if (duplicate) {
+        return res.status(400).json({ error: 'Item already exists' });
+    }
 
-    shoppingListModel.updateOne({_id: req.params.id}, {$addToSet: {items: req.body.item}}).then(result => {
-        console.log(result);
-        if (result.modifiedCount > 0) {
-            console.log('Item added to shopping list');
-            res.status(201).send('Item added to shopping list');
-        } else {
-            console.log('Shopping list not found');
-            res.status(404).json({error: 'Shopping list not found'});
-        }
-    });
+    const result = await shoppingListModel.updateOne(
+        { _id: req.params.id },
+        { $addToSet: { items: item } }
+    );
+
+    if (result.modifiedCount > 0) {
+        return res.status(201).send('Item added to shopping list');
+    } else {
+        return res.status(404).json({ error: 'Shopping list not found' });
+    }
 });
+
 
 app.delete('/shopping-list/:id/items/:item_id', async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id) || !mongoose.Types.ObjectId.isValid(req.params.item_id)) {
