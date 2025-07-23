@@ -37,7 +37,7 @@ export default function EditShoppingList () {
         if(!newShoppingListName || /[\s\t]/.test(newShoppingListName)) return;
         setIsLoading(true);
         try {
-            await editShoppingListName({_id: id, name: newShoppingListName} as Partial<IShoppingList>);
+            await editShoppingListName({_id: id, name: newShoppingListName.trim()} as Partial<IShoppingList>);
             setTimeout(() => {
                 setIsLoading(false);
                 navigate('/');

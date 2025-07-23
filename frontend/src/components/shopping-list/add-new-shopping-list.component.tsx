@@ -20,7 +20,7 @@ export function AddNewShoppingList() {
         setErrorMessage(null);
         setIsLoading(true);
         try {
-            await createShoppingList({ name: newShoppingListName } as Partial<IShoppingList>);
+            await createShoppingList({ name: newShoppingListName.trim() } as Partial<IShoppingList>);
 
             setNewShoppingListName('');
             navigate('/');
@@ -32,6 +32,7 @@ export function AddNewShoppingList() {
             }
         } finally {
             setIsLoading(false);
+            setTimeout(() => setErrorMessage(null), 5000);
         }
     }
 

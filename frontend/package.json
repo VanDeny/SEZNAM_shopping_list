@@ -6,7 +6,8 @@
     "frontend:start": "react-scripts start",
     "frontend:build": "react-scripts build",
     "frontend:test": "react-scripts test",
-    "frontend:eject": "react-scripts eject"
+    "frontend:eject": "react-scripts eject",
+    "frontend:lint": "eslint \"src/**/*.{js,ts,jsx,tsx}\""
   },
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
@@ -45,6 +46,10 @@
   },
   "devDependencies": {
     "@types/react-modal": "^3.16.3",
-    "@types/react-router-dom": "^5.3.3"
+    "@types/react-router-dom": "^5.3.3",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.5"
   }
 }

@@ -19,6 +19,8 @@ export default function ShoppingLists() {
             } else {
                 setErrorMessage('Unexpected error occurred');
             }
+        }   finally {
+            setTimeout(() => setErrorMessage(null), 5000);
         }
     }
 

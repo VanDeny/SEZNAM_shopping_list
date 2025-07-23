@@ -53,6 +53,7 @@ export default function ShoppingListDetail() {
             }
         } finally {
             setIsLoading(false);
+            setTimeout(() => setErrorMessage(null), 5000);
         }
     }
 

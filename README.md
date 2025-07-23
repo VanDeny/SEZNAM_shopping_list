@@ -68,3 +68,12 @@ Installed Docker and Node.js
 5. Enjoy the app
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## What would be added next
+
+1. Testing
+2. Some form of authentication(Keycloak probably)
+3. Drag and drop(react-dnd)
+4. Item whisperer
+5. Improve styling
