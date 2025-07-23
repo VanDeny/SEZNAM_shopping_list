@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {IShoppingList} from "../../models/shoppingList.model";
 import {deleteShoppingList, pullShoppingLists} from '../../services/api/api.service';
 import {confirm} from "../modal/yes-no-modal.modal";
@@ -6,20 +6,34 @@ import {useNavigate} from 'react-router-dom';
 
 export default function ShoppingLists() {
     const [shoppingListArray, setShoppingListArray] = useState<IShoppingList[]>([]);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const refresh = () => {
-        pullShoppingLists()
-            .then(data => setShoppingListArray(data));
+    const refresh = async () => {
+        setErrorMessage(null);
+        try {
+            const data = await pullShoppingLists();
+            setShoppingListArray(data);
+        } catch (e) {
+            if (e instanceof Error) {
+                setErrorMessage(e.message);
+            } else {
+                setErrorMessage('Unexpected error occurred');
+            }
+        }
     }
 
     useEffect(() => {
-        refresh();
+        const load = async () => {
+            await refresh();
+        };
+
+        load();
     }, []);
 
     const handleDelete = async (_id: string) => {
         if (await confirm('Do you want to delete this shopping list?')) {
             await deleteShoppingList(_id);
-            refresh();
+            await refresh();
         }
     }
 
@@ -69,6 +83,11 @@ export default function ShoppingLists() {
                     </ul>
                 </div>
             </div>
+            {errorMessage && (
+                <div className="error-message">
+                    {errorMessage}
+                </div>
+            )}
         </div>
     )
 }
