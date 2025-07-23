@@ -47,7 +47,7 @@ Installed Docker and Node.js
    ```sh
    git clone https://github.com/VanDeny/SEZNAM_shopping_list.git
    ```
-2. Install NPM packages for both backend and frontend
+2. Install NPM dependencies for both backend and frontend
    ```sh
    ../frontend $ npm install
    ```
